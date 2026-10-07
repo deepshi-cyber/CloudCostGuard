@@ -2,280 +2,959 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>CloudCostGuard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudCostGuard | FinOps Dashboard</title>
 
 <style>
-
-*{box-sizing:border-box}
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#07130f;
-color:white;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.container{
-max-width:1100px;
-margin:auto;
-padding:30px 20px;
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: #07130f;
+  color: #e9fff4;
+  min-height: 100vh;
 }
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
+button, input, select {
+  font: inherit;
 }
 
-h1{margin:0;font-size:32px}
-
-.subtitle{
-color:#91b3a1;
-margin-top:7px;
+button {
+  cursor: pointer;
 }
 
-.badge{
-border:1px solid #315d49;
-color:#86efac;
-padding:8px 13px;
-border-radius:20px;
-font-size:12px;
+.container {
+  width: min(1200px, 92%);
+  margin: auto;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
+/* HEADER */
+header {
+  padding: 25px 0;
+  border-bottom: 1px solid #17352b;
+  background: #091a14;
 }
 
-.card,.panel{
-background:#0d2119;
-border:1px solid #214234;
-border-radius:16px;
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
-.card{padding:20px}
-
-.label{
-color:#91b3a1;
-font-size:13px;
+.logo {
+  font-size: 25px;
+  font-weight: 800;
+  color: #58e6a5;
 }
 
-.number{
-font-size:29px;
-font-weight:bold;
-margin-top:8px;
+.subtitle {
+  color: #89a99d;
+  margin-top: 5px;
+  font-size: 14px;
 }
 
-.panel{
-padding:20px;
-margin-top:18px;
+.badge {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #103b2b;
+  color: #6ff0b2;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.progress{
-height:14px;
-background:#183427;
-border-radius:20px;
-overflow:hidden;
+/* NAV */
+.nav {
+  display: flex;
+  gap: 10px;
+  margin: 25px 0;
+  flex-wrap: wrap;
 }
 
-.progress span{
-display:block;
-height:100%;
-width:73%;
-background:#86efac;
+.nav button {
+  border: 1px solid #23483b;
+  background: #0d211a;
+  color: #a9c7bb;
+  padding: 10px 16px;
+  border-radius: 9px;
 }
 
-.service{
-display:grid;
-grid-template-columns:150px 1fr 90px;
-align-items:center;
-gap:15px;
-margin:18px 0;
+.nav button.active,
+.nav button:hover {
+  background: #58e6a5;
+  color: #06120d;
 }
 
-.bar{
-height:9px;
-background:#183427;
-border-radius:20px;
-overflow:hidden;
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
-.bar span{
-display:block;
-height:100%;
-background:#5eead4;
+.card {
+  background: #0b1d16;
+  border: 1px solid #18392d;
+  border-radius: 14px;
+  padding: 20px;
 }
 
-.amount{text-align:right}
-
-.recommendation{
-border:1px solid #214234;
-padding:15px;
-border-radius:12px;
-margin-top:10px;
+.stat-title {
+  color: #89a99d;
+  font-size: 13px;
 }
 
-.recommendation b{
-display:block;
-margin-bottom:5px;
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  margin-top: 10px;
 }
 
-.recommendation p{
-color:#91b3a1;
-font-size:13px;
-margin:0;
+.green {
+  color: #58e6a5;
 }
 
-footer{
-color:#718f80;
-font-size:12px;
-margin-top:20px;
+.yellow {
+  color: #f4d56a;
 }
 
-@media(max-width:700px){
-
-.stats{
-grid-template-columns:1fr 1fr;
+.red {
+  color: #ff7979;
 }
 
-header{
-flex-direction:column;
-align-items:flex-start;
-gap:15px;
+/* CONTROLS */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 25px 0;
+  flex-wrap: wrap;
 }
 
-.service{
-grid-template-columns:100px 1fr 70px;
+.search {
+  flex: 1;
+  min-width: 220px;
+  background: #0b1d16;
+  border: 1px solid #23483b;
+  color: white;
+  padding: 12px;
+  border-radius: 9px;
+  outline: none;
 }
 
+select {
+  background: #0b1d16;
+  color: white;
+  border: 1px solid #23483b;
+  padding: 12px;
+  border-radius: 9px;
 }
 
+/* MAIN GRID */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin-bottom: 18px;
+}
+
+/* BUDGET */
+.progress-bg {
+  width: 100%;
+  height: 13px;
+  background: #18352b;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress {
+  height: 100%;
+  width: 73.7%;
+  background: #58e6a5;
+  border-radius: 20px;
+  transition: width .4s;
+}
+
+.budget-info {
+  display: flex;
+  justify-content: space-between;
+  color: #9dbab0;
+  font-size: 13px;
+}
+
+/* SERVICES */
+.service {
+  margin-bottom: 18px;
+}
+
+.service-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+
+.service-name {
+  color: #d9eee6;
+}
+
+.service-cost {
+  font-weight: bold;
+}
+
+.service-bar {
+  height: 8px;
+  background: #18352b;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.service-fill {
+  height: 100%;
+  background: #58e6a5;
+  border-radius: 10px;
+}
+
+/* OPTIMIZATION */
+.optimization {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid #1c3b30;
+  background: #0d211a;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.optimization h4 {
+  margin-bottom: 5px;
+}
+
+.optimization p {
+  font-size: 12px;
+  color: #89a99d;
+}
+
+.action-btn {
+  background: transparent;
+  border: 1px solid #58e6a5;
+  color: #58e6a5;
+  padding: 8px 12px;
+  border-radius: 7px;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  background: #58e6a5;
+  color: #06120d;
+}
+
+/* TABLE */
+.table-card {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 14px 10px;
+  border-bottom: 1px solid #18392d;
+}
+
+th {
+  color: #78988d;
+  font-size: 12px;
+}
+
+td {
+  font-size: 14px;
+}
+
+.status {
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+}
+
+.status.review {
+  background: #3d3516;
+  color: #f4d56a;
+}
+
+.status.good {
+  background: #123c2c;
+  color: #58e6a5;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.modal-box {
+  background: #0b1d16;
+  border: 1px solid #2b5948;
+  border-radius: 15px;
+  padding: 25px;
+  width: min(450px, 100%);
+}
+
+.modal-box h2 {
+  margin-bottom: 15px;
+}
+
+.modal-box input {
+  width: 100%;
+  background: #07130f;
+  border: 1px solid #284d3e;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 10px 0 15px;
+}
+
+.primary-btn {
+  background: #58e6a5;
+  color: #06120d;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.close-btn {
+  float: right;
+  background: transparent;
+  color: #9dbab0;
+  border: none;
+  font-size: 20px;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #58e6a5;
+  color: #06120d;
+  padding: 13px 18px;
+  border-radius: 9px;
+  font-weight: bold;
+  display: none;
+  z-index: 20;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 30px 0;
+  color: #66877b;
+  font-size: 12px;
+}
+
+/* RESPONSIVE */
+@media(max-width: 850px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width: 550px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .header-content {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .optimization {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
 <header>
+  <div class="container header-content">
+    <div>
+      <div class="logo">☁ CloudCostGuard</div>
+      <div class="subtitle">Cloud FinOps & Cost Governance Dashboard</div>
+    </div>
 
-<div>
-<h1>☁️ CloudCostGuard</h1>
-<div class="subtitle">
-Cloud FinOps & Cost Governance Dashboard
-</div>
-</div>
-
-<div class="badge">
-PORTFOLIO • SYNTHETIC DATA
-</div>
-
+    <div class="badge">PORTFOLIO • DEMO DATA</div>
+  </div>
 </header>
 
-<div class="stats">
+<main class="container">
 
-<div class="card">
-<div class="label">MTD Spend</div>
-<div class="number">$18,420</div>
+  <!-- NAVIGATION -->
+  <div class="nav">
+    <button class="active" onclick="showSection('dashboard', this)">
+      Dashboard
+    </button>
+
+    <button onclick="showSection('services', this)">
+      Services
+    </button>
+
+    <button onclick="showSection('optimization', this)">
+      Optimization
+    </button>
+
+    <button onclick="openBudgetModal()">
+      ⚙ Budget Settings
+    </button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard">
+
+    <div class="stats">
+
+      <div class="card">
+        <div class="stat-title">MTD Spend</div>
+        <div class="stat-value green" id="spend">$18,420</div>
+      </div>
+
+      <div class="card">
+        <div class="stat-title">Monthly Budget</div>
+        <div class="stat-value" id="budget">$25,000</div>
+      </div>
+
+      <div class="card">
+        <div class="stat-title">Budget Used</div>
+        <div class="stat-value yellow" id="percentage">
+          73.7%
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="stat-title">Remaining</div>
+        <div class="stat-value green" id="remaining">
+          $6,580
+        </div>
+      </div>
+
+    </div>
+
+    <div class="controls">
+
+      <input
+        class="search"
+        id="searchInput"
+        placeholder="🔎 Search cloud services..."
+        oninput="searchServices()"
+      >
+
+      <select id="monthSelect" onchange="changeMonth()">
+        <option>October 2026</option>
+        <option>September 2026</option>
+        <option>August 2026</option>
+      </select>
+
+    </div>
+
+    <div class="main-grid">
+
+      <!-- BUDGET -->
+      <div class="card">
+
+        <h3 class="section-title">
+          Budget Overview
+        </h3>
+
+        <div class="budget-info">
+          <span>Current Spend</span>
+          <strong id="budgetSpend">$18,420</strong>
+        </div>
+
+        <div class="progress-bg">
+          <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="budget-info">
+          <span>0%</span>
+          <span id="budgetPercent">73.7% used</span>
+          <span>100%</span>
+        </div>
+
+        <br>
+
+        <button
+          class="primary-btn"
+          onclick="showBudgetAlert()">
+          Check Budget Health
+        </button>
+
+      </div>
+
+      <!-- TOP SERVICES -->
+      <div class="card">
+
+        <h3 class="section-title">
+          Top Cost Services
+        </h3>
+
+        <div class="service">
+          <div class="service-top">
+            <span class="service-name">Compute</span>
+            <span class="service-cost">$7,940</span>
+          </div>
+
+          <div class="service-bar">
+            <div class="service-fill" style="width:100%"></div>
+          </div>
+        </div>
+
+        <div class="service">
+          <div class="service-top">
+            <span class="service-name">Database</span>
+            <span class="service-cost">$4,380</span>
+          </div>
+
+          <div class="service-bar">
+            <div class="service-fill" style="width:55%"></div>
+          </div>
+        </div>
+
+        <div class="service">
+          <div class="service-top">
+            <span class="service-name">Storage</span>
+            <span class="service-cost">$2,760</span>
+          </div>
+
+          <div class="service-bar">
+            <div class="service-fill" style="width:35%"></div>
+          </div>
+        </div>
+
+        <div class="service">
+          <div class="service-top">
+            <span class="service-name">Network</span>
+            <span class="service-cost">$1,920</span>
+          </div>
+
+          <div class="service-bar">
+            <div class="service-fill" style="width:24%"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" style="display:none;">
+
+    <div class="card table-card">
+
+      <h3 class="section-title">
+        Cloud Service Cost Analysis
+      </h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Monthly Cost</th>
+            <th>Usage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="serviceTable">
+
+          <tr>
+            <td>Compute</td>
+            <td>$7,940</td>
+            <td>82%</td>
+            <td>
+              <span class="status review">Review</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Database</td>
+            <td>$4,380</td>
+            <td>76%</td>
+            <td>
+              <span class="status good">Healthy</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Storage</td>
+            <td>$2,760</td>
+            <td>64%</td>
+            <td>
+              <span class="status review">Review</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Network</td>
+            <td>$1,920</td>
+            <td>58%</td>
+            <td>
+              <span class="status good">Healthy</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Monitoring</td>
+            <td>$1,420</td>
+            <td>48%</td>
+            <td>
+              <span class="status good">Healthy</span>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </section>
+
+  <!-- OPTIMIZATION -->
+  <section id="optimization" style="display:none;">
+
+    <div class="card">
+
+      <h3 class="section-title">
+        💡 Optimization Opportunities
+      </h3>
+
+      <div class="optimization">
+
+        <div>
+          <h4>Rightsize Underutilized Compute</h4>
+          <p>
+            Several compute resources show lower utilization.
+          </p>
+        </div>
+
+        <button
+          class="action-btn"
+          onclick="applyOptimization('Compute rightsizing')">
+          Analyze
+        </button>
+
+      </div>
+
+      <div class="optimization">
+
+        <div>
+          <h4>Review Storage Lifecycle</h4>
+          <p>
+            Move older data to lower-cost storage tiers.
+          </p>
+        </div>
+
+        <button
+          class="action-btn"
+          onclick="applyOptimization('Storage lifecycle')">
+          Analyze
+        </button>
+
+      </div>
+
+      <div class="optimization">
+
+        <div>
+          <h4>Investigate Spend Spike</h4>
+          <p>
+            Recent network usage shows an unusual increase.
+          </p>
+        </div>
+
+        <button
+          class="action-btn"
+          onclick="applyOptimization('Network spend spike')">
+          Analyze
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- BUDGET MODAL -->
+<div class="modal" id="budgetModal">
+
+  <div class="modal-box">
+
+    <button class="close-btn" onclick="closeBudgetModal()">
+      ×
+    </button>
+
+    <h2>Budget Settings</h2>
+
+    <p style="color:#89a99d;">
+      Set your monthly cloud budget.
+    </p>
+
+    <input
+      type="number"
+      id="newBudget"
+      value="25000"
+      placeholder="Enter budget"
+    >
+
+    <button
+      class="primary-btn"
+      onclick="updateBudget()">
+      Save Budget
+    </button>
+
+  </div>
+
 </div>
 
-<div class="card">
-<div class="label">Monthly Budget</div>
-<div class="number">$25,000</div>
-</div>
-
-<div class="card">
-<div class="label">Budget Used</div>
-<div class="number">73.7%</div>
-</div>
-
-<div class="card">
-<div class="label">Remaining</div>
-<div class="number">$6,580</div>
-</div>
-
-</div>
-
-<div class="panel">
-
-<h2>Budget Utilization</h2>
-
-<div class="progress">
-<span></span>
-</div>
-
-<p style="color:#91b3a1">
-Current synthetic spend is within the configured budget.
-</p>
-
-</div>
-
-<div class="panel">
-
-<h2>Service Cost Breakdown</h2>
-
-<div class="service">
-<b>Compute</b>
-<div class="bar"><span style="width:82%"></span></div>
-<div class="amount">$7,940</div>
-</div>
-
-<div class="service">
-<b>Database</b>
-<div class="bar"><span style="width:61%"></span></div>
-<div class="amount">$4,380</div>
-</div>
-
-<div class="service">
-<b>Storage</b>
-<div class="bar"><span style="width:38%"></span></div>
-<div class="amount">$2,760</div>
-</div>
-
-<div class="service">
-<b>Network</b>
-<div class="bar"><span style="width:27%"></span></div>
-<div class="amount">$1,920</div>
-</div>
-
-<div class="service">
-<b>Monitoring</b>
-<div class="bar"><span style="width:20%"></span></div>
-<div class="amount">$1,420</div>
-</div>
-
-</div>
-
-<div class="panel">
-
-<h2>💡 Optimization Opportunities</h2>
-
-<div class="recommendation">
-<b>Rightsize underutilized compute</b>
-<p>Review low-utilization synthetic instances for possible savings.</p>
-</div>
-
-<div class="recommendation">
-<b>Review storage lifecycle policy</b>
-<p>Identify older synthetic objects suitable for lower-cost tiers.</p>
-</div>
-
-<div class="recommendation">
-<b>Investigate weekly spend spike</b>
-<p>Compare service-level trends before approving changes.</p>
-</div>
-
-</div>
+<div class="toast" id="toast"></div>
 
 <footer>
-Demo data only • No real cloud billing account connected
+  CloudCostGuard • Portfolio Prototype • Synthetic Demo Data Only
 </footer>
 
-</div>
+<script>
+
+let currentSpend = 18420;
+let currentBudget = 25000;
+
+/* SECTION NAVIGATION */
+
+function showSection(section, button) {
+
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("services").style.display = "none";
+  document.getElementById("optimization").style.display = "none";
+
+  document.getElementById(section).style.display = "block";
+
+  document.querySelectorAll(".nav button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  if (button) {
+    button.classList.add("active");
+  }
+}
+
+/* BUDGET MODAL */
+
+function openBudgetModal() {
+  document.getElementById("budgetModal").style.display = "flex";
+}
+
+function closeBudgetModal() {
+  document.getElementById("budgetModal").style.display = "none";
+}
+
+/* UPDATE BUDGET */
+
+function updateBudget() {
+
+  const value = Number(
+    document.getElementById("newBudget").value
+  );
+
+  if (!value || value <= 0) {
+    showToast("Please enter a valid budget.");
+    return;
+  }
+
+  currentBudget = value;
+
+  updateDashboard();
+
+  closeBudgetModal();
+
+  showToast("Budget updated successfully ✓");
+}
+
+/* UPDATE DASHBOARD */
+
+function updateDashboard() {
+
+  const percentage =
+    (currentSpend / currentBudget) * 100;
+
+  const remaining =
+    currentBudget - currentSpend;
+
+  document.getElementById("budget").textContent =
+    "$" + currentBudget.toLocaleString();
+
+  document.getElementById("remaining").textContent =
+    "$" + Math.max(remaining, 0).toLocaleString();
+
+  document.getElementById("percentage").textContent =
+    percentage.toFixed(1) + "%";
+
+  document.getElementById("budgetSpend").textContent =
+    "$" + currentSpend.toLocaleString();
+
+  document.getElementById("budgetPercent").textContent =
+    percentage.toFixed(1) + "% used";
+
+  document.getElementById("progress").style.width =
+    Math.min(percentage, 100) + "%";
+
+  if (percentage >= 90) {
+
+    document.getElementById("percentage")
+      .className = "stat-value red";
+
+    document.getElementById("progress")
+      .style.background = "#ff7979";
+
+  } else if (percentage >= 75) {
+
+    document.getElementById("percentage")
+      .className = "stat-value yellow";
+
+    document.getElementById("progress")
+      .style.background = "#f4d56a";
+
+  } else {
+
+    document.getElementById("percentage")
+      .className = "stat-value green";
+
+    document.getElementById("progress")
+      .style.background = "#58e6a5";
+  }
+}
+
+/* BUDGET HEALTH */
+
+function showBudgetAlert() {
+
+  const percentage =
+    (currentSpend / currentBudget) * 100;
+
+  if (percentage >= 90) {
+    showToast("⚠ Critical: Budget usage is above 90%.");
+  }
+  else if (percentage >= 75) {
+    showToast("⚠ Warning: Budget usage is getting high.");
+  }
+  else {
+    showToast("✓ Budget health is good.");
+  }
+}
+
+/* OPTIMIZATION */
+
+function applyOptimization(name) {
+
+  showToast(
+    "Analysis started: " + name
+  );
+}
+
+/* SEARCH */
+
+function searchServices() {
+
+  const search =
+    document.getElementById("searchInput")
+      .value.toLowerCase();
+
+  const rows =
+    document.querySelectorAll("#serviceTable tr");
+
+  rows.forEach(row => {
+
+    const text =
+      row.innerText.toLowerCase();
+
+    row.style.display =
+      text.includes(search) ? "" : "none";
+  });
+
+  showSection("services");
+
+  document.querySelectorAll(".nav button")
+    .forEach(btn => btn.classList.remove("active"));
+}
+
+/* MONTH */
+
+function changeMonth() {
+
+  const month =
+    document.getElementById("monthSelect").value;
+
+  showToast(
+    "Showing cost data for " + month
+  );
+}
+
+/* TOAST */
+
+function showToast(message) {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 2500);
+}
+
+/* CLOSE MODAL WHEN CLICKING OUTSIDE */
+
+window.onclick = function(event) {
+
+  const modal =
+    document.getElementById("budgetModal");
+
+  if (event.target === modal) {
+    closeBudgetModal();
+  }
+
+};
+
+</script>
 
 </body>
-  </html>
+</html>
